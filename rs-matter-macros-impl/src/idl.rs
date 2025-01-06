@@ -323,6 +323,18 @@ pub fn server_side_cluster_generate(
 
     let krate = context.rs_matter_crate.clone();
 
+    let commands = if commands.is_empty() {
+        quote!()
+    } else {
+        quote!(
+            #[derive(strum::FromRepr, strum::EnumDiscriminants)]
+            #[repr(u32)]
+            pub enum Commands {
+                #(#commands),*
+            }
+        )
+    };
+
     quote!(
         mod #cluster_module_name {
             pub const ID: u32 = #cluster_code;
@@ -337,11 +349,7 @@ pub fn server_side_cluster_generate(
 
             #(#struct_declarations)*
 
-            #[derive(strum::FromRepr, strum::EnumDiscriminants)]
-            #[repr(u32)]
-            pub enum Commands {
-                #(#commands),*
-            }
+            #commands
         }
     )
 }
@@ -488,38 +496,38 @@ mod tests {
             "
               cluster OnOff = 6 {
                 revision 6;
-              
+
                 enum DelayedAllOffEffectVariantEnum : enum8 {
                   kDelayedOffFastFade = 0;
                   kNoFade = 1;
                   kDelayedOffSlowFade = 2;
                 }
-              
+
                 enum DyingLightEffectVariantEnum : enum8 {
                   kDyingLightFadeOff = 0;
                 }
-              
+
                 enum EffectIdentifierEnum : enum8 {
                   kDelayedAllOff = 0;
                   kDyingLight = 1;
                 }
-              
+
                 enum StartUpOnOffEnum : enum8 {
                   kOff = 0;
                   kOn = 1;
                   kToggle = 2;
                 }
-              
+
                 bitmap Feature : bitmap32 {
                   kLighting = 0x1;
                   kDeadFrontBehavior = 0x2;
                   kOffOnly = 0x4;
                 }
-              
+
                 bitmap OnOffControlBitmap : bitmap8 {
                   kAcceptOnlyWhenOn = 0x1;
                 }
-              
+
                 readonly attribute boolean onOff = 0;
                 readonly attribute optional boolean globalSceneControl = 16384;
                 attribute optional int16u onTime = 16385;
@@ -531,18 +539,18 @@ mod tests {
                 readonly attribute attrib_id attributeList[] = 65531;
                 readonly attribute bitmap32 featureMap = 65532;
                 readonly attribute int16u clusterRevision = 65533;
-              
+
                 request struct OffWithEffectRequest {
                   EffectIdentifierEnum effectIdentifier = 0;
                   enum8 effectVariant = 1;
                 }
-              
+
                 request struct OnWithTimedOffRequest {
                   OnOffControlBitmap onOffControl = 0;
                   int16u onTime = 1;
                   int16u offWaitTime = 2;
                 }
-              
+
                 /** On receipt of this command, a device SHALL enter its ‘Off’ state. This state is device dependent, but it is recommended that it is used for power off or similar functions. On receipt of the Off command, the OnTime attribute SHALL be set to 0. */
                 command Off(): DefaultSuccess = 0;
                 /** On receipt of this command, a device SHALL enter its ‘On’ state. This state is device dependent, but it is recommended that it is used for power on or similar functions. On receipt of the On command, if the value of the OnTime attribute is equal to 0, the device SHALL set the OffWaitTime attribute to 0. */

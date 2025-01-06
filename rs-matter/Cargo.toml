@@ -102,3 +102,8 @@ required-features = ["std", "async-io", "async-compat"]
 # name = "speaker"
 # path = "../examples/speaker/src/main.rs"
 # required-features = ["std", "async-io"]
+
+[[example]]
+name = "contact_sensor"
+path = "../examples/contact_sensor/src/main.rs"
+required-features = ["std", "async-io"]

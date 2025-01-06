@@ -50,7 +50,7 @@ mod dev_att;
 
 static DEV_DET: BasicInfoConfig = BasicInfoConfig {
     vid: 0xFFF1,
-    pid: 0x8001,
+    pid: 0x8003,
     hw_ver: 2,
     sw_ver: 1,
     sw_ver_str: "1",
@@ -225,7 +225,7 @@ const NODE: Node<'static> = Node {
 
 fn dm_handler<'a>(
     matter: &'a Matter<'a>,
-    on_off: &'a cluster_contact_sensor::ContactSensorCluster,
+    contact_sensor: &'a cluster_contact_sensor::ContactSensorCluster,
 ) -> impl Metadata + NonBlockingHandler + 'a {
     (
         NODE,
@@ -235,7 +235,7 @@ fn dm_handler<'a>(
                 descriptor::ID,
                 descriptor::DescriptorCluster::new(Dataver::new_rand(matter.rand())),
             )
-            .chain(1, cluster_contact_sensor::ID, on_off),
+            .chain(1, cluster_contact_sensor::ID, contact_sensor),
     )
 }
 

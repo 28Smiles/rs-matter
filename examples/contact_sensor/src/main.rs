@@ -29,7 +29,7 @@ use rs_matter::core::{BasicCommData, Matter, MATTER_PORT};
 use rs_matter::data_model::cluster_basic_information::BasicInfoConfig;
 use rs_matter::data_model::cluster_contact_sensor;
 use rs_matter::data_model::core::IMBuffer;
-use rs_matter::data_model::device_types::DEV_TYPE_ON_OFF_LIGHT;
+use rs_matter::data_model::device_types::DEV_TYPE_CONTACT_SENSOR;
 use rs_matter::data_model::objects::*;
 use rs_matter::data_model::root_endpoint;
 use rs_matter::data_model::subscriptions::Subscriptions;
@@ -217,7 +217,7 @@ const NODE: Node<'static> = Node {
         root_endpoint::endpoint(0, root_endpoint::OperNwType::Ethernet),
         Endpoint {
             id: 1,
-            device_types: &[DEV_TYPE_ON_OFF_LIGHT],
+            device_types: &[DEV_TYPE_CONTACT_SENSOR],
             clusters: &[descriptor::CLUSTER, cluster_contact_sensor::CLUSTER],
         },
     ],

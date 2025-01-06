@@ -32,7 +32,7 @@ pub const DEV_TYPE_ON_SMART_SPEAKER: DeviceType = DeviceType {
     drev: 2,
 };
 
-pub const DEV_TYPE_CONTAC_SENSOR: DeviceType = DeviceType {
+pub const DEV_TYPE_CONTACT_SENSOR: DeviceType = DeviceType {
     dtype: 0x0015,
     drev: 2,
 };
